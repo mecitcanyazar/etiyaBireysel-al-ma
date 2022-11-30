@@ -61,13 +61,14 @@ export class CategoryListComponent implements OnInit {
 
   getListCategories() {
     this.categoriesService.getList().subscribe((response) => {
-      this.categories = response;
+        this.categories = response;
     });
   }
 
   getSelectedCategoryIdFromRoute() {
     //* Observer Design Pattern
     this.activatedRoute.params.subscribe((params) => {
+      // console.log(params) // çıktısı {categoryId: '1'}
       if (params['categoryId'] !== undefined)
         this.selectedCategoryId = Number(params['categoryId']);
     }); //* Callback

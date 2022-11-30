@@ -9,19 +9,20 @@ import { Products } from 'src/app/models/products';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
+  page:number = 1;
+  pageSize:number = 9
+
   productCardClass: string = 'card col-3 ms-3 mb-3';
 
   //: ! Şuan undefined olduğu için kızma, daha sonra seni atacağım şeklinde söz vermiş oluyoruz.
   //: ? Bu özellik undefined olabilir demek.
   //: null için ? kullanamıyoruz, | null diye belirtmemiz gerekiyor.
   products!: Products[];
-  isLoaded = false
-
   selectedProductCategoryId: number | null = null;
-  searchProductNameInput: any = null;  // any yapınca sorun çözüldü ama mantığını anlamadım.
-  get filteredProducts(): any[] {
+  searchProductNameInput: string | null = null;
+  get filteredProducts(): Products[] {
     let filteredProducts = this.products;
-    console.log(filteredProducts)
+    if (!filteredProducts) return [];
 
       if (this.selectedProductCategoryId)
         filteredProducts = filteredProducts.filter(
@@ -30,36 +31,63 @@ export class ProductListComponent implements OnInit {
 
       if (this.searchProductNameInput)
         filteredProducts = filteredProducts.filter((p) =>
-          p.name.toLowerCase().includes(this.searchProductNameInput?.toLowerCase()));
+          p.name.toLowerCase().includes(
+            // this.searchProductNameInput!.toLowerCase()
+            // Non-null assertion opeartor: Sol tarafın null veya undefined olmadığını garanti ediyoruz.
+         // searchProductName? dediğimizde hata veriyordu searchProductName! diyerek bunu aştık.Çünkü daha sonra oluşturacağım seni dedik (! ile)
+         this.searchProductNameInput !== null
+                ? this.searchProductNameInput.toLowerCase()
+                : ''
+            ));
 
         return filteredProducts;
   }
+
+  isLoading:number = 0 // true/false yerine sayaç methodu kullandık.Benzer işler ama bu iki veya daha fazla async işlem için daha geçerli.
+  errorAlertMessage: string | null = null;
+
+
   //: ActivatedRoute mevcut route bilgisini almak için kullanılır.
   //: Router yeni route bilgisi oluşturmak için kullanılır.
-  constructor(private activatedRoute: ActivatedRoute, private router: Router,private productService:ProductsService ) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+     private router: Router,
+     private productService:ProductsService ) {}
 
   ngOnInit(): void {
+
+    this.getProductsList();
+
     this.getCategoryIdFromRoute();
     this.getSearchProductNameFromRoute();
-    this.getProductList();
   }
-  getProductList(){
-    this.productService.getProducts().subscribe((response)=>{
+  getProductsList() {
+    this.isLoading = this.isLoading + 1;
+    // Subject: Observable'ın bir alt sınıfıdır. Subject'lerin bir özelliği ise, bir Subject üzerinden subscribe olunan herhangi bir yerden next() metodu çağrıldığında, o Subject üzerinden subscribe olan her yerde bu değişiklik görülebilir.
+    this.productService.getProducts().subscribe({
+      next: (response) => {
+        setTimeout(() => {
+        this.products = response;
+        this.isLoading = this.isLoading - 1;
+        }, 3000);
+      },
+      error: () => {
+        setTimeout(() => {
+        this.errorAlertMessage = "Server Error. Couldn't get products list.";
+        this.isLoading = this.isLoading - 1;
+      }, 3000);
+      },
+      complete: () => {
+        console.log('completed');
+      },
+    });
+  }
 
-      // ! setTimeout !
-      // setTimeout kullanarak sunucudan productList datalarını 2 sn'de getirmesini istedik. // Async
-      // En başta false olarak tanımlandığım dataLoaded değişkeni veriler yüklendiğinde false olsun.
-      //HTML sayfasında da eğer dataLoaded true ise productList'leri göster şeklinde koşul geçtim.
-      setTimeout(()=>{
-        this.products = response
-        this.isLoaded = true
-      },2000)
-    })
-  }
 
   getCategoryIdFromRoute(): void {
     //: route params'ları almak adına activatedRoute.params kullanılır.
     this.activatedRoute.params.subscribe((params) => {
+      // console.log(params)
       if (params['categoryId'])
         this.selectedProductCategoryId = parseInt(params['categoryId']);
       else this.selectedProductCategoryId = null;
@@ -101,7 +129,9 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-
+  onPageDataChange(event:any){
+    this.page = event
+  }
 
 }
 

@@ -1,14 +1,4 @@
-<div *ngIf = "isLoaded === false">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  <div class="alert alert-warning " role="alert">
-    Ürünler listeleniyor,lütfen bekleyiniz...
-  </div>
-</div>
-
-<div *ngIf = "isLoaded !== false"
- class="d-flex">
+<div class="d-flex">
   <h1 class="display-6">Product List</h1>
   <div class="ms-3 d-flex align-items-center">
     <!--# One Way binding (tek yönlü atama) -->
@@ -24,13 +14,26 @@
     />
     <!-- [value]="searchProductNameInput" -->
     <!--: $event ilgili event'in özelliklerinin bulunduğu html tarafından geçilen js objesi angular tarafından geçilecektir. -->
-    <!-- [(ngModel)] hem bir event hem de value değeri olduğundan syntaxi bu şekilde.[value]- kullanmama gerek kalmadı angular value değerini benim için getirecek.-->
   </div>
 </div>
 
+<ng-template #loadingSpinner>
+  <div class="d-flex justify-content-center align-items-center h-100">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+</ng-template>
 
-
-  <div class="row">
+<!-- Boolean(isLoading) -->
+<div  *ngIf="!!isLoading === false; else loadingSpinner " class="row">
+  <ng-container *ngIf="errorAlertMessage; else productsList">
+    <div
+      class="alert alert-danger"
+      role="alert"
+      [innerText]="errorAlertMessage"
+    >
+      <!-- {{ errorAlertMessage || "null" }} -->
+    </div>
+  </ng-container>
   <!--* unordered list -->
   <!--# Built-in Directive -->
 
@@ -38,16 +41,22 @@
   <!-- <div *ngFor="let product of products"> -->
 
   <!--# Attribute directive -->
-    <ng-template ngFor let-product [ngForOf]="filteredProducts" ;>
+  <ng-template #productsList>
+
+    <ng-template ngFor let-product [ngForOf]="filteredProducts | paginate:{itemsPerPage:pageSize,
+      currentPage:page} "
+    >
+
       <!-- Sanal, html tarafında render'lanmayan veya bir etikete karşılık gelmeyen bir etiket olacak. -->
 
       <!--# *ngIf -->
 
       <div
-        *ngIf="isProductCardShow(product) ; else productDiscontinued"
+        *ngIf="isProductCardShow(product); else productDiscontinued"
         [class]="productCardClass"
       >
         <div class="card-body">
+
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">
             Some quick example text to build on the card title and make up the
@@ -68,11 +77,27 @@
         </div>
       </ng-template>
     </ng-template>
-    <div *ngIf="filteredProducts.length === 0">
-      <div class="alert alert-danger" role="alert">
-        Aradığınız ürün bulunamadı...
-      </div>
-    </div>
+  </ng-template>
 
-    <!-- </div> -->
+  <div>
+    <pagination-controls
+     previousLabel="Prev"
+     nextLabel="Next"
+     (pageChange) = "onPageDataChange($event)"
+     >
+    </pagination-controls>
+  </div>
+
+  <!-- </div> -->
+
+  <div *ngIf="filteredProducts.length === 0">
+    <div class="alert alert-danger" role="alert">
+      The product  was not found...
+    </div>
+  </div>
+
+</div>
+
+
+
 

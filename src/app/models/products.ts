@@ -10,3 +10,9 @@ export interface Products{
     discontinued: boolean;
     name: string;
 }
+
+//json2ts eklentisiyle Ctrl+Alt+V yapınca kendisi oluşturacak.
+
+
+
+

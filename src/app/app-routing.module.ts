@@ -7,7 +7,9 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomePageComponent },
   { path: 'category/:categoryId', component: HomePageComponent },
+  { path: 'products?_page=:page&_limit=:limit', component: HomePageComponent },
   { path: 'login', component: LoginPageComponent },
+
 ];
 
 @NgModule({
