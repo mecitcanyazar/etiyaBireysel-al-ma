@@ -19,8 +19,17 @@ export class CategoryListComponent implements OnInit {
   //# Encapsulation
   private _categoriesListItems: any[] = [{ label: 'All', value: null }];
   //# Getter
+    // Getter ile private içinde gizlediğim değişkene ulaşabiliyorum.
+    // get kullanarak return ettiğim categoriesListItems()'ı category-listcomponent.html sayfasında ilgili değişkenin adını yazarak ulaşıyorum ve sadece bu durumda bu kod bloğu çalışıyor.
   get categoriesListItems(): any[] {
-    // property
+     // property
+    // get yazınca method olarak değil de property olarak davranıyor.(Yukarıdaki categories gibi.)
+
+    // Yukarıda categoriesListItems'ı array olarak tanımladığım için spread operatör kullanıp array'in içindeki objeleri aldım.
+    // Yine aynı şekilde categories'dekileri de spread operaör kullanarak aldım.
+    // Yukarıda private içinde _categoriesListItems array tipinde olduğundann burda da array return edip bunları parametre olarak gönderdik.
+
+
     return [
       ...this._categoriesListItems,
       ...this.categories.map((c) => {
@@ -69,6 +78,10 @@ export class CategoryListComponent implements OnInit {
     //* Observer Design Pattern
     this.activatedRoute.params.subscribe((params) => {
       // console.log(params) // çıktısı {categoryId: '1'}
+
+        // All'dan ilk categoriye tıkladığımda category/categoryId pathindeki categoryId değişmesine rağmen routeparams değeri null olarak göründüğü (selectedCategoryId == null çünkü.) için değişmiyor.
+        // Bu yüzden ordaki categoryId değerini gözlemlemem lazım.Observer (Gözlemlenen) bu yüzden o değere subscribe oluyorum.
+        // Eğer bu değer domain'in arkasından gelen (/) params değil de queryParams olsaydı(?frfj) o zaman değerim de queryParams olarak değişecekti.
       if (params['categoryId'] !== undefined)
         this.selectedCategoryId = Number(params['categoryId']);
     }); //* Callback
@@ -94,5 +107,7 @@ export class CategoryListComponent implements OnInit {
 
   isSelectedCategory(categoryId: number | null): boolean {
     return categoryId === this.selectedCategoryId;
+      // Burda da karşılaştırma yaptırıyorum ve categoryId ile ilgili methoddan dönen değer eşitse return et.
+
   }
 }

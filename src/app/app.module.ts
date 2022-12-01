@@ -22,7 +22,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     LoginPageComponent,
     LoadingSpinnerComponent,
   ], // HTML tarafındaki angular bileşenlerini tanımlar
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,NgxPaginationModule], // Angular modülleri import edeceğimiz yer
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,NgxPaginationModule], // Angular modülleri import edeceğimiz yer.Angular cli kendisi yapacak.
   providers: [], // IoC Container'daki Dependency Injection'ları tanımlar
   bootstrap: [AppComponent], // Hangi bileşenin ilk açıldığında çalışacağını belirtir
 })

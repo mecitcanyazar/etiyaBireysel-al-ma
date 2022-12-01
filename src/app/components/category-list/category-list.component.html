@@ -5,6 +5,11 @@
 <ul class="list-group">
   <!-- Built-in Directive -->
   <!-- *ngFor is a built-in structural directive -->
+
+  <!-- li'leri button olarak guncelledik ve tıklandığında ilgli path'e gitmesini istiyoruz.
+  All adında yeni bir button ekledik buna tıklayınca anasayfaya dönecek.
+  get categoriesListItems(): any[] {
+  Ve burada kodu sadeleştirmek ard arda li yani button yazmamak için refactoring yaptık.category-list-component.ts sayfasında categoriesListItems adında yeni bir değişken tanımladık. -->
   <button
     *ngFor="let categoryListItem of categoriesListItems"
     [routerLink]="
@@ -15,6 +20,13 @@
     class="list-group-item text-start"
     [ngClass]="{ active: isSelectedCategory(categoryListItem.value) }"
   >
+    <!-- Angular'da event'leri görmek için() kullanıyoruz. (click) = onclik-parantez koyunca başına on yazmamıza gerek kalmıyor.->
+    <! ngClass ile isSelectedCategory'den dönen değere active class'ı ekle dedik. -->
+      <!--Ya da aşağıdakilerdeki gibi de yazabiliriz. Aynısı.
+        [routerLink] = "'category/' , category.id"
+        [routerLink] = "['category/'+ category.id"-->
+
+
     <!--* [routerLink]="'category/' + category.id" veya [routerLink]="['category', category.id]" da olabilir.-->
     <!-- (click)="onSelectedCategory(categoryListItem.value)" -->
     <!--: routerLink'lerde başında / olmazsa o anki route path'ine ekleme yapar. routerlink / ile başladığı taktirde alan adının (localhost:4200) sonuna verdiğimiz route path'ini ekleyecek değiştrir.-->

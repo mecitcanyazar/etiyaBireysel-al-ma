@@ -16,13 +16,32 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <!--! Angular içerisinde routing yaparken hyperlink reference kullanmak bize yasak. -->
         <li *ngFor="let navItem of navItems" class="nav-item">
+            <!-- li'ler için değişen şeyleri navbar.component.ts dosyasında navItems adı altında bi yerde topladım ve burada da tek tek yazmaktansa onları çağırdım.  -->
+
+            <!-- hyperlink (<a>) sayfa yeniden yükleneceği için SPA kullanmamızın bi anlamı kalmıyor. -->
+            <!--Angular içinden routing yaparken hyperlink referance kullanmak bize yasak. routerLink kullanacağız.  -->
+            <!-- Sadece "/" durumunda aktif olsun /login durumunda olmasın demek için routerLinkActiveOptions kullandık ve bu bir obje istiyor.Gerisi syntax -->
           <a
             class="nav-link"
             routerLink="{{ navItem.routerLink }}"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: navItem.isRouterActiveExact }"
-            >{{ navItem.label }}</a
+            >
+              {{ navItem.label }}
+            </a
           >
+                <!-- !!!! NOT !!!! -->
+                  <!--Ya da aşağıdakilerdeki gibi de yazabiliriz. Aynısı.
+                    routerLink = {{navItem.routerLink=""}}
+                    [routerLink]="navItem.routerLink"
+                  [ routerLink] sytaxi attribute bazında değişken geçmek için  daha pratik.Ardından " " gelmeli.
+                <!-- !!!!!!!!!!!!! -->
+
+                <!-- routerLinkActiveOptions 'ı şunun için kullandık;
+                  HomePage için verdiğimiz path '/' aynı zamanda LoginPage'in path'inde de olduğundan '/login'
+                  ve css dosyasında active class'ına font-weigh:bold özelliğini ekledik.
+                  Active olan class'ı değiştirdiğimde yalnızca ilgili class'a active attribute'u eklensin.
+                  Sytax olarak routerLinkActiveOptions {exact:boolean} döndürür.  -->
         </li>
       </ul>
       <form class="d-flex" role="search">
