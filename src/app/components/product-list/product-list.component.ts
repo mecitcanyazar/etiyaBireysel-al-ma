@@ -163,6 +163,7 @@ export class ProductListComponent implements OnInit {
         filters:this.filters
       });
     });
+    this.pagination.page = 1
   }
 
 
