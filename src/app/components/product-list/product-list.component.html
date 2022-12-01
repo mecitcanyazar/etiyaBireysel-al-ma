@@ -107,7 +107,8 @@
       <button class="page-link" >{{pagination.page}}</button>
     </li>
 
-    <li class="page-item">
+    <li class="page-item"
+    [ngClass]="{ disabled: pagination.page === lastPage }">
       <button
       (click) = "changePage(pagination.page + 1) "
       class="page-link" >

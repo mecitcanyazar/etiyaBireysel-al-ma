@@ -4,7 +4,7 @@ import { ProductsService } from 'src/app/services/products.service';
 import { Products } from 'src/app/models/products';
 import { GetListOptionsType } from 'src/app/models/get-list-options';
 import { Pagination } from 'src/app/models/pagination';
-import { filter } from 'rxjs';
+import { filter, last } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit {
     pageSize:9
   }
 
-  lastPage!: number;
+  lastPage?: number; // ? ile tipi number | undefined da olabilir dedik.
   filters:any = {}
 
 
@@ -112,6 +112,7 @@ export class ProductListComponent implements OnInit {
     //: route params'ları almak adına activatedRoute.params kullanılır.
     this.activatedRoute.params.subscribe((params) => {
       this.pagination.page = 1;
+      this.lastPage = undefined
       if (params['categoryId']) {
         // this.selectedProductCategoryId = parseInt(params['categoryId']);
         this.filters['categoryId'] = parseInt(params['categoryId']);
