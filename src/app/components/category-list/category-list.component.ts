@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,  Router } from '@angular/router';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { Category } from 'src/app/models/category';
 
@@ -22,6 +22,7 @@ export class CategoryListComponent implements OnInit {
     // Getter ile private içinde gizlediğim değişkene ulaşabiliyorum.
     // get kullanarak return ettiğim categoriesListItems()'ı category-listcomponent.html sayfasında ilgili değişkenin adını yazarak ulaşıyorum ve sadece bu durumda bu kod bloğu çalışıyor.
   get categoriesListItems(): any[] {
+    if(!this.categories) return this._categoriesListItems // categories'i başta tanımladığımız için api'den veriyi henüz çekmemişken burası map methoduna ulaşamıyor ve hata veriyordu.
      // property
     // get yazınca method olarak değil de property olarak davranıyor.(Yukarıdaki categories gibi.)
 
@@ -56,6 +57,7 @@ export class CategoryListComponent implements OnInit {
   //: Dependency Injection, IoC container'ın içerisindeki referansları kullanmamızı sağlayan bir mekanizmadır.
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router:Router,
     private categoriesService: CategoriesService
   ) {
     //: constructor class oluşturulduğu an çalışır.
@@ -87,23 +89,46 @@ export class CategoryListComponent implements OnInit {
     }); //* Callback
   }
 
-  // onSelectedCategory(categoryId: number | null): void {
+  onSelectedCategory(categoryId: number | null): void {
     // if (category === null) this.selectedCategoryId = null;
     // else this.selectedCategoryId = category.id;
 
-    //# Debugging
-    //debugger; // breakpoint. Uygulama çalışma anında bu satıra geldiğinde uygulama durucak ve adım adım takip edebileceğimiz bir panel açılacak.
+    // # Debugging
+    // debugger; // breakpoint. Uygulama çalışma anında bu satıra geldiğinde uygulama durucak ve adım adım takip edebileceğimiz bir panel açılacak.
 
-    //# ternary operator
+    // # ternary operator
     // this.selectedCategoryId = category === null ? null : category.id;
 
-    //# optional chaining operator
-    //: object?.id dediğimiz zaman, object null değilse ve id'e ulaşabiliyorsa id'sini alır, null ise null döner.
+    // # optional chaining operator
+    // : object?.id dediğimiz zaman, object null değilse ve id'e ulaşabiliyorsa id'sini alır, null ise null döner.
 
-    //# nullish coalescing operator
-    //: ?? operatörü ile sol taraf false (null, undefined, 0, "") ise sağ tarafı atar.
-  //   this.selectedCategoryId = categoryId ?? null;
-  // }
+    // # nullish coalescing operator
+    // : ?? operatörü ile sol taraf false (null, undefined, 0, "") ise sağ tarafı atar.
+    // this.selectedCategoryId = categoryId ?? null; //: getSelectedCategoryIdFromRoute() methodu ile aynı işi yapıyor.
+
+    // let routeByUrl = '/'
+    // if(this.selectedCategoryId !==null) routeByUrl += 'categoris/' + this.selectedCategoryId
+    // this.router.navigateByUrl(routeByUrl, {queryParams:})
+
+    // navigate array halinde navigateByUrl string halinde syntax olarak. Yukarıdaki yorum satırı aşağıdakinin string formatı aynı işlem.
+
+        // !! NOT BAŞLANGIÇ
+    //: Herhangi bir kategoride aradığmız değerin filtrelendikten sonra click ile kategori değiştirdiğimizde de default olarak orda arama yapması için aşağıdaki işlemleri yaptık.
+        // Html tarafında routerLink ile routing yapmıştık onu yoruma alıp bu şekilde ilerledik.
+
+    let route = ['/'];
+
+    if(categoryId !== null) {
+      route.push('category', categoryId!.toString());
+    }
+      this.activatedRoute.queryParams.subscribe((queryParams)=> {
+      this.router.navigate(route, {queryParams });
+        // {queryParams:queryParams} kısayolu {queryParams} key ile parametre aynı ise bu şekilde yazabilirim.
+    })
+
+      // !! NOT SONU
+  }
+
 
   isSelectedCategory(categoryId: number | null): boolean {
     return categoryId === this.selectedCategoryId;

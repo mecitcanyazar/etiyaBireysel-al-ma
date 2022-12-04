@@ -42,55 +42,60 @@
 
   <!--# Attribute directive kullanıyoruz.-->
   <ng-template #productsList>
-
-    <!-- <ng-template ngFor let-product [ngForOf]="filteredProducts  " -->
-    <ng-template ngFor let-product [ngForOf]="products "
-    >
-      <!-- Sanal, html tarafında render'lanmayan veya bir etikete karşılık gelmeyen bir etiket olacak. -->
-
-      <!--# *ngIf -->
-
-      <div
-        *ngIf="isProductCardShow(product); else productDiscontinued"
-        [class]="productCardClass"
-        >
-        <!-- ya da  class = "{{productCardClass}}" aynısı  -->
-
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-          <a href="#" class="btn btn-primary">Add to Cart</a>
-        </div>
+    <ng-container *ngIf="products.length === 0; else showProductList ">
+      <div class="alert alert-danger" role="alert">
+        The product was not found...
       </div>
-      <!--* list istem -->,
+    </ng-container>
 
-          <!-- else durumu için ng-template oluşturduk -->
-      <ng-template #productDiscontinued>
-          <!-- else durumunda # ekliyoruz. -->
+    <ng-template #showProductList>
+      <ng-template ngFor let-product [ngForOf]="products "
+      >
+        <!-- Sanal, html tarafında render'lanmayan veya bir etikete karşılık gelmeyen bir etiket olacak. -->
+
+        <!--# *ngIf -->
+
         <div
-          class="{{
-            productCardClass
-          }} d-flex justify-content-center align-items-center"
-        >
-          <p>{{ product.name }} ürünü şuan satılmıyor.</p>
+          *ngIf="isProductCardShow(product); else productDiscontinued"
+          [class]="productCardClass"
+          >
+          <!-- ya da  class = "{{productCardClass}}" aynısı  -->
+
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a href="#" class="btn btn-primary">Add to Cart</a>
+          </div>
         </div>
+        <!--* list istem -->,
+
+            <!-- else durumu için ng-template oluşturduk -->
+        <ng-template #productDiscontinued>
+            <!-- else durumunda # ekliyoruz. -->
+          <div
+            class="{{
+              productCardClass
+            }} d-flex justify-content-center align-items-center"
+          >
+            <p>{{ product.name }} ürünü şuan satılmıyor.</p>
+          </div>
+        </ng-template>
       </ng-template>
     </ng-template>
   </ng-template>
 
+
+    <!-- <ng-template ngFor let-product [ngForOf]="filteredProducts  " -->
+
+  <!-- </ng-template> -->
+
   <!-- </div> -->
 
   <!-- <div *ngIf="products.filteredProducts === 0"> -->
-  <div *ngIf="products.length === 0">
-    <div class="alert alert-danger" role="alert">
-      The product  was not found...
-    </div>
-  </div>
 
-</div>
 
 <nav aria-label="Page navigation ">
   <ul class="pagination justify-content-center">

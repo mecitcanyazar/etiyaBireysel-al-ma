@@ -1,0 +1,26 @@
+<table class="table">
+  <thead>
+    <tr class="text-center">
+      <th scope="col">Id</th>
+      <th scope="col" >Name</th>
+      <th scope="col" >Description</th>
+      <th scope="col">Update</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-category [ngForOf]="categories" class="">
+      <tr class="text-center">
+        <th scope="row">{{category.id}}</th>
+        <td>{{category.name}}</td>
+        <td>{{category.description}}</td>
+        <td>
+          <button (click)="showUpdate(category.id)"
+          type="button" class="btn btn-primary"
+          >
+          Click
+        </button></td>
+      </tr>
+    </ng-template>
+  </tbody>
+</table>
+

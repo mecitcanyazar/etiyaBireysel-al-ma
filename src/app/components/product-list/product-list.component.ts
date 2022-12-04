@@ -20,7 +20,7 @@ export class ProductListComponent implements OnInit {
   //: null için ? kullanamıyoruz, | null diye belirtmemiz gerekiyor.
   products!: Products[];
   // selectedProductCategoryId: number | null = null;
-  // searchProductNameInput: string | null = null;
+  searchProductNameInput: string | null = null;
 
   pagination:Pagination = {
     page:1,
@@ -29,7 +29,6 @@ export class ProductListComponent implements OnInit {
 
   lastPage?: number; // ? ile tipi number | undefined da olabilir dedik.
   filters:any = {}
-
 
 
   //# Client Side filter
@@ -87,12 +86,12 @@ export class ProductListComponent implements OnInit {
         // this.lastPage = response.lastPage;
         //: Json-server projelerinde pagination bilgileri header içerisinde gelmektedir. Header üzerinden atama yapmamız gerekmektedir. Bu yöntem pek kullanılmayacağı için, bu şekilde geçici bir çözüm ekleyebiliriz.
         if (response.length < this.pagination.pageSize) { // filtreleme yapıyoruz.Gelen response mesela 10'dan(pagination.pagesize) küçükse yani 10dan az data varsa
-          if (response.length === 0)
+          if (response.length === 0 && this.pagination.page > 1)
             this.pagination.page = this.pagination.page - 1; //1.sayfada hiç ürün olmayıp 2.sayfada olması durumu gibi.
-            this.lastPage = this.pagination.page;
-            this.products = response;
+          this.lastPage = this.pagination.page;
         }
-        if (response.length > 0) this.products = response;
+
+        this.products = response;
         this.isLoading = this.isLoading - 1;
       },
       error: () => {
@@ -111,8 +110,9 @@ export class ProductListComponent implements OnInit {
   getCategoryIdFromRoute(): void {
     //: route params'ları almak adına activatedRoute.params kullanılır.
     this.activatedRoute.params.subscribe((params) => {
-      this.pagination.page = 1;
-      this.lastPage = undefined
+
+      this.resetPagination()  // refactoring için artık üsttekileri bu method içinde tanımladım.
+
       if (params['categoryId']) {
         // this.selectedProductCategoryId = parseInt(params['categoryId']);
         this.filters['categoryId'] = parseInt(params['categoryId']);
@@ -158,7 +158,7 @@ export class ProductListComponent implements OnInit {
       //   this.searchProductNameInput = null;
 
 
-
+      this.resetPagination()
       this.getProductsList({ // category değiştiğinde yeni sayfanın da 1'den başlaması için pagination:this.pagination yaptık
         pagination:this.pagination,
         filters:this.filters
@@ -178,11 +178,11 @@ export class ProductListComponent implements OnInit {
     let queryParams: any = {};
     // if (this.searchProductNameInput !== '')
     //   queryParams['searchProductName'] = this.filters['searchProductName'];
-    console.log(this.filters)
     if(this.filters['name_like'] !== "")
       queryParams['name_like'] = this.filters['name_like']
 
     this.router.navigate([], {
+      // navigate array halinde navigateByUrl string halinde syntax olarak.
       queryParams: queryParams,
     });
   }
@@ -191,6 +191,11 @@ export class ProductListComponent implements OnInit {
     this.pagination.page = page;
     // Sayfayı güncelledikten sonra ikinci sayfayı göstermesi için tekrar istekte bulunuyoruz
     this.getProductsList({pagination : this.pagination,filters : this.filters})
+  }
+
+  resetPagination(){ // refactoring yaptık ve productList'i tekrar çağırmadan önce bunları sıfırlayacağımız için bir method içinde tanımladık.
+    this.pagination.page = 1;
+    this.lastPage = undefined
   }
 }
 

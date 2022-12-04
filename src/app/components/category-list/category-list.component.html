@@ -12,14 +12,17 @@
   Ve burada kodu sadeleştirmek ard arda li yani button yazmamak için refactoring yaptık.category-list-component.ts sayfasında categoriesListItems adında yeni bir değişken tanımladık. -->
   <button
     *ngFor="let categoryListItem of categoriesListItems"
-    [routerLink]="
+    (click)="onSelectedCategory(categoryListItem.value)"
+    class="list-group-item text-start"
+    [ngClass]="{ active: isSelectedCategory(categoryListItem.value) }"
+    >
+    <!-- [routerLink]="
       categoryListItem.value === null
         ? '/'
         : '/category/' + categoryListItem.value
-    "
-    class="list-group-item text-start"
-    [ngClass]="{ active: isSelectedCategory(categoryListItem.value) }"
-  >
+    " -->
+
+
     <!-- Angular'da event'leri görmek için() kullanıyoruz. (click) = onclik-parantez koyunca başına on yazmamıza gerek kalmıyor.->
     <! ngClass ile isSelectedCategory'den dönen değere active class'ı ekle dedik. -->
       <!--Ya da aşağıdakilerdeki gibi de yazabiliriz. Aynısı.
