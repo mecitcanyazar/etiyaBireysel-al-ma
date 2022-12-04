@@ -104,10 +104,10 @@ export class CategoryFormComponent implements OnInit {
     })
   }
 
-  delete():void {
-    this.categoryService.delete(this.categoryToUpdate!.id).subscribe(() => {
-      this.toastrService.success('Category deleted successfully');
-      this.router.navigate(['/dashboard', 'categories']);
+  delete() {
+    this.categoryService.delete(this.categoryToUpdate!.id).subscribe(()=>{
+      this.toastrService.success("Category deleted succesfully");
+      this.router.navigate(['/dashboard','categories']);
     })
   }
 }
