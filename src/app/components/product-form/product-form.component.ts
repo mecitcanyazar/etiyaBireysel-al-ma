@@ -5,6 +5,11 @@ import {FormBuilder,FormGroup,Validators,} from '@angular/forms';
 import { Products } from 'src/app/models/products';
 import { ProductsService } from 'src/app/services/products.service';
 import { ToastrService } from 'ngx-toastr';
+import { Category } from 'src/app/models/category';
+import { CategoriesService } from 'src/app/services/categories.service';
+import { SupplierService } from 'src/app/services/supplier.service';
+import { Supplier } from 'src/app/models/supplier';
+
 
 @Component({
   selector: 'app-product-form',
@@ -14,6 +19,10 @@ import { ToastrService } from 'ngx-toastr';
 export class ProductFormComponent implements OnInit {
   productForm!: FormGroup;
   productToUpdate:Products | null = null
+  categories:Category[] = []
+  suppliers:Supplier[] = []
+
+
 
   // Getter
   get isEditting():boolean {
@@ -26,7 +35,10 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductsService,
     private toastrService:ToastrService,
     private activatedRoute:ActivatedRoute,
-    private router:Router
+    private router:Router,
+    private categoriesServive:CategoriesService,
+    private supplierService: SupplierService,
+
   ) {
     // FormGroup içindekileri aşağıdaki gibi new'lemek yerine FromBuilder ile alabildiğim bir servisim var.
     // this.productForm = new FormGroup({
@@ -34,8 +46,23 @@ export class ProductFormComponent implements OnInit {
     // })
   }
   ngOnInit(): void {
+    this.getCategories()
+    this.getSuppliers()
     this.createProductForm()
     this.getProductIdFromRoute()
+  }
+
+
+  getCategories():void {
+    this.categoriesServive.getList().subscribe((response:Category[])=>{
+      this.categories = response
+    })
+  }
+
+  getSuppliers() {
+    this.supplierService.getList().subscribe((response:Supplier[])=>{
+      this.suppliers = response
+    })
   }
 
   createProductForm() {
@@ -100,10 +127,12 @@ export class ProductFormComponent implements OnInit {
   }
 
   add() {
-    // TODO:productServie yardımıyla ekleme işlemini yapacağız.
+    // TODO:productService yardımıyla ekleme işlemini yapacağız.
     const request:Products = {
       //: Backend'in product add endpointine gönderilecek olan request modeli.(Şu an kullandığımız backend'de product gönderiyoruz.)
       ...this.productForm.value,
+        categoryId:Number(this.productForm.value.categoryId), // İlgili categoryId'yi al ama numeric olarak yazdır.
+        supplierId:Number(this.productForm.value.supplierId), // İlgili categoryId'yi al ama numeric olarak yazdır.
         name:this.productForm.value.name.trim() //: this.productForm.value ile gelen name değerinin üzerine tekrar yazıyoruz.
     }
 

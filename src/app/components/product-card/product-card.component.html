@@ -1,0 +1,27 @@
+<div class="card-body">
+  <h5 class="card-title" [appHighlight] = "'orange'">{{product.name }}</h5>
+  <p class="card-text">
+    {{product.quantityPerUnit | uppercase}}
+  </p>
+  <p>
+    {{product.unitPrice | currency : "₺" : "symbol" }}
+    <!-- Built-in pipe (currency) -->
+  </p>
+  <p [appHighlight] = "'yellow'" >{{ dateNow | date : "M/d/yy" }}</p>
+  <a (click)="addToCardClick()" class="btn btn-primary">Add to Cart</a>
+
+
+  <div class="mt-3">
+    <button
+    type="button"
+    class="btn"
+    (click)="showAlert()"
+    [appButton] ="'btn-primary'">Show Alert</button>
+  </div>
+
+</div>
+
+
+
+
+

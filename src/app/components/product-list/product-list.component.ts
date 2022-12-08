@@ -5,6 +5,11 @@ import { Products } from 'src/app/models/products';
 import { GetListOptionsType } from 'src/app/models/get-list-options';
 import { Pagination } from 'src/app/models/pagination';
 import { filter, last } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+import { Category } from 'src/app/models/category';
+import { CategoriesService } from 'src/app/services/categories.service';
+import { FilterProducts } from 'src/app/models/filterProducts';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-list',
@@ -12,6 +17,7 @@ import { filter, last } from 'rxjs';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
+  name!: string;
 
   productCardClass: string = 'card col-3 ms-3 mb-3';
 
@@ -22,13 +28,20 @@ export class ProductListComponent implements OnInit {
   // selectedProductCategoryId: number | null = null;
   searchProductNameInput: string | null = null;
 
+  priceFilterType: 'gt' | 'lt' | 'gte' | 'lte' | 'eq' = 'eq';
+
+
+  filterCategoryIdForm!:FormGroup
+  categories:Category[] = []
+
+
   pagination:Pagination = {
     page:1,
     pageSize:9
   }
 
   lastPage?: number; // ? ile tipi number | undefined da olabilir dedik.
-  filters:any = {}
+  filters: any = { productFilterPrice: 0,filterByCategoryId:1,filterDiscontinued:false};
 
 
   //# Client Side filter
@@ -66,15 +79,43 @@ export class ProductListComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
      private router: Router,
-     private productService:ProductsService ) {}
+     private productService:ProductsService,
+     private categoriesServive:CategoriesService,
+     private toastrService:ToastrService
+     ) {}
+
 
   ngOnInit(): void {
 
     // this.getProductsList({pagination : {page:1,pageSize:9} });
+    this.isLoading = this.isLoading + 2;
+
+    this.getCategories()
+
 
     this.getCategoryIdFromRoute();
     this.getSearchProductNameFromRoute();
   }
+
+  getCategories():void {
+    this.categoriesServive.getList().subscribe((response:Category[])=>{
+      this.categories = response
+    })
+  }
+
+
+
+  onSearchPriceChange(event: any) {
+    if (this.filters.productFilterPrice == null) {
+      this.filters.productFilterPrice = 0;
+    }
+  }
+
+
+  addToCardClick(product:Products ){
+    console.log('ProductListComponentden sepete eklenmesi istenen ürün:',  product)
+  }
+
   getProductsList(options?:GetListOptionsType):void {
     this.isLoading = this.isLoading + 1;
     //: Subject: Observable'ın bir alt sınıfıdır. Subject'lerin bir özelliği ise, bir Subject üzerinden subscribe olunan herhangi bir yerden next() metodu çağrıldığında, o Subject üzerinden subscribe olan her yerde bu değişiklik görülebilir.
@@ -92,13 +133,13 @@ export class ProductListComponent implements OnInit {
         }
 
         this.products = response;
-        this.isLoading = this.isLoading - 1;
+        if (this.isLoading > 0) this.isLoading = this.isLoading - 1;
       },
       error: () => {
         // setTimeout(() => {
           this.errorAlertMessage = "Server Error. Couldn't get products list.";
-          this.isLoading = this.isLoading - 1;
-      // }, 3000);
+          if (this.isLoading > 0) this.isLoading = this.isLoading - 1;
+          // }, 3000);
       },
       complete: () => {
         console.log('completed');
@@ -124,7 +165,8 @@ export class ProductListComponent implements OnInit {
         // filters = {categoryId : 1} mesela 1'di şimdi filters= {} oldu.
       }
 
-
+      if (this.isLoading > 0) this.isLoading = this.isLoading - 1;
+      if (this.isLoading === 0)
       this.getProductsList({ // category değiştiğinde yeni sayfanın da 1'den başlaması için pagination:this.pagination yaptık
         pagination:this.pagination,
         filters:this.filters
@@ -138,33 +180,37 @@ export class ProductListComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((queryParams) => {
       // && this.searchProductNameInput == null
 
-      if(queryParams['name_like']){
-        this.filters['name_like'] = queryParams['name_like']
+      // if(queryParams['name_like']){
+      //   this.filters['name_like'] = queryParams['name_like']
+      // }
+      // else {
+      //   if(this.filters['name_like']) delete this.filters['name_like']
+      // }
+
+      if (
+        queryParams['searchProductName'] &&
+        queryParams['searchProductName'] !== this.searchProductNameInput
+      ) {
+        this.searchProductNameInput = queryParams['searchProductName'];
+        this.filters['name_like'] = this.searchProductNameInput;
       }
-      else {
-        if(this.filters['name_like']) delete this.filters['name_like']
+      //# Defensive Programming
+      if (
+        queryParams['searchProductName'] === undefined &&
+        this.searchProductNameInput !== null
+      ) {
+        this.searchProductNameInput = null;
+        delete this.filters['name_like'];
       }
 
-      // if (
-      //   queryParams['searchProductName'] &&
-      //   queryParams['searchProductName'] !== this.searchProductNameInput
-      // )
-      //   this.searchProductNameInput = queryParams['searchProductName'];
-      // // # Defensive Programming
-      // if (
-      //   !queryParams['searchProductName'] &&
-      //   this.searchProductNameInput !== null
-      // )
-      //   this.searchProductNameInput = null;
 
-
-      this.resetPagination()
+      if (this.isLoading > 0) this.isLoading = this.isLoading - 1;
+      if (this.isLoading === 0)
       this.getProductsList({ // category değiştiğinde yeni sayfanın da 1'den başlaması için pagination:this.pagination yaptık
         pagination:this.pagination,
         filters:this.filters
       });
     });
-    this.pagination.page = 1
   }
 
 
@@ -175,11 +221,12 @@ export class ProductListComponent implements OnInit {
   onSearchProductNameChange(event: any): void {
     // this.searchProductNameInput = event.target.value; //: ngModel'imiz kendisi bu işlemi zaten gerçekleştiriyor.
 
+    this.filters['name_like'] = this.searchProductNameInput;
+    this.resetPagination();
+
     let queryParams: any = {};
-    // if (this.searchProductNameInput !== '')
-    //   queryParams['searchProductName'] = this.filters['searchProductName'];
-    if(this.filters['name_like'] !== "")
-      queryParams['name_like'] = this.filters['name_like']
+    if (this.searchProductNameInput !== '')
+      queryParams['searchProductName'] = this.searchProductNameInput
 
     this.router.navigate([], {
       // navigate array halinde navigateByUrl string halinde syntax olarak.
@@ -197,5 +244,14 @@ export class ProductListComponent implements OnInit {
     this.pagination.page = 1;
     this.lastPage = undefined
   }
+
+  filtersCategoryId(event:Event){
+    this.filters.filterByCategoryId = Number((event.target as HTMLInputElement).value)
+  }
+
+  showAlert(text:string) {
+    this.toastrService.error(text)
+  }
+
 }
 

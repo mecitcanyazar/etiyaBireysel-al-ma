@@ -1,6 +1,6 @@
 <div class="d-flex">
-  <h1 class="display-6">Product List</h1>
-  <div class="ms-3 d-flex align-items-center">
+  <h1 class="display-6 ">Product List</h1>
+  <div class="ms-3 d-flex align-items-center ">
     <!--# One Way binding (tek yönlü atama) -->
     <!--# Two Way Binding (en temel, klasik): event gerekir ve value değerini dinamik geçmek gerekir. -->
     <!--# Two Way Binding: [(ngModel)] ile input değerini bir state ile, iki yönlü olarak birbirine bağlayabiliriz -->
@@ -10,12 +10,154 @@
       id="searchProductNameInput"
       placeholder="Search..."
       (change)="onSearchProductNameChange($event)"
-      [(ngModel)]="filters['name_like']"
+      [(ngModel)]="searchProductNameInput"
     />
     <!-- [value]="searchProductNameInput" -->
     <!--: $event ilgili event'in özelliklerinin bulunduğu html tarafından geçilen js objesi angular tarafından geçilecektir. -->
   </div>
 </div>
+
+<!-- Two Way Binding ([(ngModel)] event olayı) de  ReactiveForms da kullanabiliriz.Bu iki işlem birbirinin alternatii -->
+<div class="row">
+  <div class="col-md-4 mb-3 mt-3">
+    <h5>Price</h5>
+    <input
+      type="number"
+      class="form-control"
+      id="productPriceFilterInput"
+      (change)="onSearchPriceChange($event)"
+      [(ngModel)]="filters.productFilterPrice"
+    />
+  </div>
+  <div class="col-md-6 " >
+    <div class="d-flex align-items-center justify-content-center mt-5 ">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="radioDefault1"
+          value="eq"
+          [(ngModel)]="priceFilterType"
+          checked
+        />
+        <label class="form-check-label" for="radioDefault1"> Eşit </label>
+      </div>
+
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="radioDefault2"
+          value="gte"
+          [(ngModel)]="priceFilterType"
+        />
+        <!-- Two Way Binging => ngModel ile priceFilterType değişkeni value=gte değerini aldığında ts tarafında da priceFilterType = gte olacak. -->
+        <!-- Aynı şekilde ts tarafında ilk başta eq eşitliği ile başlattığımda html tarafı onu algılayacak ve priceFilterType = eq olacak.  -->
+        <label class="form-check-label" for="radioDefault2">
+          Büyük Eşit
+        </label>
+
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="radioDefault3"
+          value="lte"
+          [(ngModel)]="priceFilterType"
+        />
+        <label class="form-check-label" for="radioDefault3">
+          Küçük Eşit
+        </label>
+
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="radioDefault4"
+          value="lt"
+          [(ngModel)]="priceFilterType"
+        />
+        <label class="form-check-label" for="radioDefault4"> Küçük </label>
+      </div>
+
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="radioDefault5"
+          value="gt"
+          [(ngModel)]="priceFilterType"
+        />
+        <label class="form-check-label" for="radioDefault5"> Büyük </label>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row col-md-12">
+  <div class="col-md-4 mb-3 mt-3">
+    <h5>Category Name</h5>
+    <form [formGroup]="filterCategoryIdForm" (change)="filtersCategoryId($event)">
+      <select
+      formControlName="filterByCategoryId"
+      class="form-select"
+      id="filterInput"
+      [value]="0"
+    >
+    <!-- /Burdaki value değeri ts tarafında değişkeni başlattığım değer,bu yüzden angular değişkeni old.için [] kullanmamız lazım. -->
+        <option value="0">All</option>
+        <option value="1">Beverages</option>
+        <option value="2">Condiments</option>
+        <option value="3">Confections</option>
+        <option value="4">Dairy Products</option>
+        <option value="5">Grains/Cereals</option>
+        <option value="6">Meat/Poultry</option>
+        <option value="7">Produce</option>
+        <option value="8">Seafood</option>
+        <!-- <option *ngFor="let category of categories" [value]="category.id" > {{category.name}}</option> -->
+      </select>
+    </form>
+  </div>
+
+  <div class="col-md-6 mb-3 mt-3 mx-5 ">
+    <h5>Is Continued ?</h5>
+    <div class="d-flex gap-2 mt-3">
+
+      <div class="form-check">
+        <input
+        class="form-check-input"
+        type="radio"
+        name="discontinued"
+        id="discontinued1"
+        [value]="false"
+        [(ngModel)]="filters.filterDiscontinued"
+        >
+          Continued
+      </div>
+      <div class="form-check">
+        <input class="form-check-input"
+         type="radio"
+         name="discontinued"
+         id="discontinued2 "
+         [value]="true"
+          [(ngModel)]="filters.filterDiscontinued"
+         >
+          Discontinued
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 <ng-template #loadingSpinner>
   <div class="d-flex justify-content-center align-items-center h-100">
@@ -24,7 +166,7 @@
 </ng-template>
 
 <!-- Boolean(isLoading) -->
-<div  *ngIf="!!isLoading === false; else loadingSpinner " class="row">
+<div *ngIf="!!isLoading === false; else loadingSpinner" class="row">
   <ng-container *ngIf="errorAlertMessage; else productsList">
     <div
       class="alert alert-danger"
@@ -42,15 +184,36 @@
 
   <!--# Attribute directive kullanıyoruz.-->
   <ng-template #productsList>
-    <ng-container *ngIf="products.length === 0; else showProductList ">
+    <ng-container *ngIf="products.length === 0; else showProductList">
       <div class="alert alert-danger" role="alert">
         The product was not found...
       </div>
     </ng-container>
 
     <ng-template #showProductList>
-      <ng-template ngFor let-product [ngForOf]="products "
+      <ng-template
+        ngFor
+        let-product
+        [ngForOf]="
+        products
+        | allFiltersToProducts:searchProductNameInput ?? '' : filters.productFilterPrice : priceFilterType  :filters.filterByCategoryId:filters.filterDiscontinued
+    "
       >
+
+
+      <!-- | filterCategoryId : filters.filterByCategoryId -->
+
+      <!-- | discontinued:filters.filterDiscontinued-->
+      <!-- | filterCategoryId : filters.filterByCategoryId -->
+
+      <!-- | filterProduct : searchProductNameInput ?? ''
+        | filterProductByPrice
+          : filters.productFilterPrice
+          : priceFilterType -->
+
+
+
+
         <!-- Sanal, html tarafında render'lanmayan veya bir etikete karşılık gelmeyen bir etiket olacak. -->
 
         <!--# *ngIf -->
@@ -58,23 +221,23 @@
         <div
           *ngIf="isProductCardShow(product); else productDiscontinued"
           [class]="productCardClass"
-          >
+        >
           <!-- ya da  class = "{{productCardClass}}" aynısı  -->
+          <app-product-card
+            (onAddToCardClick)="addToCardClick($event)"
+            (showText)="showAlert($event)"
+            [product]="product"
+          ></app-product-card>
 
-          <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Add to Cart</a>
-          </div>
+          <!-- Soldaki onAddToCardClick emitter'ının gönderdiği parametreleri (this.products içindekileri) alabilmek için $event kullanıyoruz. -->
+          <!-- parent'dan child'e veri gönderdik. [product]="product" -->
+          <!-- Card'ı component haline getirdik.Refactoring -->
         </div>
-        <!--* list istem -->,
+        <!--* list istem -->
 
-            <!-- else durumu için ng-template oluşturduk -->
+        <!-- else durumu için ng-template oluşturduk -->
         <ng-template #productDiscontinued>
-            <!-- else durumunda # ekliyoruz. -->
+          <!-- else durumunda # ekliyoruz. -->
           <div
             class="{{
               productCardClass
@@ -87,8 +250,7 @@
     </ng-template>
   </ng-template>
 
-
-    <!-- <ng-template ngFor let-product [ngForOf]="filteredProducts  " -->
+  <!-- <ng-template ngFor let-product [ngForOf]="filteredProducts  " -->
 
   <!-- </ng-template> -->
 
@@ -96,34 +258,26 @@
 
   <!-- <div *ngIf="products.filteredProducts === 0"> -->
 
+  <nav aria-label="Page navigation ">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [ngClass]="{ disabled: pagination.page == 1 }">
+        <button (click)="changePage(pagination.page - 1)" class="page-link">
+          Previous
+        </button>
+      </li>
 
-<nav aria-label="Page navigation ">
-  <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <button class="page-link">{{ pagination.page }}</button>
+      </li>
 
-    <li class="page-item" [ngClass]=" {disabled:pagination.page == 1}">
-      <button
-       (click) = "changePage(pagination.page - 1)"
-        class="page-link" >
-        Previous
-      </button>
-    </li>
-
-    <li class="page-item">
-      <button class="page-link" >{{pagination.page}}</button>
-    </li>
-
-    <li class="page-item"
-    [ngClass]="{ disabled: pagination.page === lastPage }">
-      <button
-      (click) = "changePage(pagination.page + 1) "
-      class="page-link" >
-        Next
-      </button>
-    </li>
-
-  </ul>
-</nav>
-
-
-
-
+      <li
+        class="page-item"
+        [ngClass]="{ disabled: pagination.page === lastPage }"
+      >
+        <button (click)="changePage(pagination.page + 1)" class="page-link">
+          Next
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

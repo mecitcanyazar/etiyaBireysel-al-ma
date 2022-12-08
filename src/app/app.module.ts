@@ -20,6 +20,14 @@ import { DashboardCategoriesPageComponent } from './pages/dashboard-categories-p
 import { DashboardCategoriesListComponent } from './components/dashboard-categories-list/dashboard-categories-list.component';
 import { CategoryFormPageComponent } from './pages/category-form-page/category-form-page.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
+import { FilterProductPipe } from './pipes/filter-product.pipe';
+import { FilterProductByPricePipe } from './pipes/filter-product-by-price.pipe';
+import { HighlightDirective } from './directives/highlight.directive';
+import { ButtonDirective } from './directives/button.directive';
+import { FilterCategoryIdPipe } from './pipes/filter-category-id.pipe';
+import { AllFiltersToProductsPipe } from './pipes/all-filters-to-products.pipe';
+import { DiscontinuedPipe } from './pipes/discontinued.pipe';
 
 
 @NgModule({
@@ -39,6 +47,14 @@ import { CategoryFormComponent } from './components/category-form/category-form.
     DashboardCategoriesListComponent,
     CategoryFormPageComponent,
     CategoryFormComponent,
+    ProductCardComponent,
+    FilterProductPipe,
+    FilterProductByPricePipe,
+    HighlightDirective,
+    ButtonDirective,
+    FilterCategoryIdPipe,
+    AllFiltersToProductsPipe,
+    DiscontinuedPipe,
   ], // HTML tarafındaki angular bileşenlerini tanımlar
   imports: [
     BrowserModule,

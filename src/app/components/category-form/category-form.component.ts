@@ -26,7 +26,7 @@ export class CategoryFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastrService:ToastrService,
     private router:Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createCategoryForm();
