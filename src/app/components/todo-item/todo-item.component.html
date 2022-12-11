@@ -1,0 +1,44 @@
+<div class="card" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title">{{ todo }}</h5>
+      <a (click)="onDeleteBtnClick()" class="btn btn-danger">Sil</a>
+    </div>
+  </div>
+
+
+
+
+
+  <div *ngIfNot="condition; else alternativeTemplate">
+    <p>Ben gözükmek istemiyorum</p>
+  </div>
+  <ng-template #alternativeTemplate>
+    <p>Ben gözükebilirm!</p>
+  </ng-template>
+
+  <!-- Aynısı ;
+  <ng-template [ngIfNot]="condition" [ngIfNotElse]="alternativeTemplate">
+    <h2>My conditional header</h2>
+  </ng-template>
+  <ng-template #alternativeTemplate>
+    <h2>My alternative header</h2>
+  </ng-template> -->
+
+
+  <!-- <p *ngIfNot="condition" class="unless a">
+    (A) This paragraph is displayed because the condition is false.
+  </p>
+
+  <p *ngIfNot="!condition" class="unless b">
+    (B) Although the condition is true,
+    this paragraph is displayed because appUnless is set to false.
+  </p>
+
+
+    <button
+      type="button"
+      class="btn btn-warning"
+      (click)="condition = !condition"
+      [ngClass] = "{ 'a': condition, 'b': !condition }" >
+      Toggle condition to {{condition ? 'false' : 'true'}}
+    </button> -->

@@ -32,7 +32,6 @@ export class ProductListComponent implements OnInit {
 
 
   filterCategoryIdForm!:FormGroup
-  categories:Category[] = []
 
 
   pagination:Pagination = {
@@ -90,17 +89,8 @@ export class ProductListComponent implements OnInit {
     // this.getProductsList({pagination : {page:1,pageSize:9} });
     this.isLoading = this.isLoading + 2;
 
-    this.getCategories()
-
-
     this.getCategoryIdFromRoute();
     this.getSearchProductNameFromRoute();
-  }
-
-  getCategories():void {
-    this.categoriesServive.getList().subscribe((response:Category[])=>{
-      this.categories = response
-    })
   }
 
 
@@ -250,7 +240,7 @@ export class ProductListComponent implements OnInit {
   }
 
   showAlert(text:string) {
-    this.toastrService.error(text)
+    this.toastrService.success(text)
   }
 
 }

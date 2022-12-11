@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class CategoriesService {
+export class CategoriesService  {
   public controllerUrl:string=`${environment.apiUrl}/categories`;
 
 //: Generic,bir class'ın metodun içerisind ekullanılacak tipi tipleri belirlemek için kullanılır.

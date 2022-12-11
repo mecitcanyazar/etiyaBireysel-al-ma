@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePageComponent } from './pages/home-page/home-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { NgModule } from '@angular/core';
@@ -28,6 +28,10 @@ import { ButtonDirective } from './directives/button.directive';
 import { FilterCategoryIdPipe } from './pipes/filter-category-id.pipe';
 import { AllFiltersToProductsPipe } from './pipes/all-filters-to-products.pipe';
 import { DiscontinuedPipe } from './pipes/discontinued.pipe';
+import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { TodoItemComponent } from './components/todo-item/todo-item.component';
+import { IfNotDirective } from './directives/if-not.directive';
+import { DateInterceptor } from './interceptors/date.interceptor';
 
 
 @NgModule({
@@ -55,6 +59,9 @@ import { DiscontinuedPipe } from './pipes/discontinued.pipe';
     FilterCategoryIdPipe,
     AllFiltersToProductsPipe,
     DiscontinuedPipe,
+    TodoListComponent,
+    TodoItemComponent,
+    IfNotDirective,
   ], // HTML tarafındaki angular bileşenlerini tanımlar
   imports: [
     BrowserModule,
@@ -66,7 +73,9 @@ import { DiscontinuedPipe } from './pipes/discontinued.pipe';
     ToastrModule.forRoot(),// ToastrModule added
 
   ], // Angular modülleri import edeceğimiz yer.Angular cli kendisi yapacak.
-  providers: [], // IoC Container'daki Dependency Injection'ları tanımlar
+  providers: [
+    {provide:HTTP_INTERCEPTORS,useClass:DateInterceptor,multi:true}
+  ], // IoC Container'daki Dependency Injection'ları tanımlar
   bootstrap: [AppComponent], // Hangi bileşenin ilk açıldığında çalışacağını belirtir
 })
 export class AppModule {}
