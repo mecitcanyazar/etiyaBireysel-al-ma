@@ -6,8 +6,6 @@ import { GetListOptionsType } from 'src/app/models/get-list-options';
 import { Pagination } from 'src/app/models/pagination';
 import { filter, last } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { Category } from 'src/app/models/category';
-import { CategoriesService } from 'src/app/services/categories.service';
 import { FilterProducts } from 'src/app/models/filterProducts';
 import { Toast, ToastrService } from 'ngx-toastr';
 
@@ -79,7 +77,6 @@ export class ProductListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
      private router: Router,
      private productService:ProductsService,
-     private categoriesServive:CategoriesService,
      private toastrService:ToastrService
      ) {}
 

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root', // HTML tarafındaki etiketi tanımlar
@@ -10,6 +12,29 @@ export class AppComponent implements OnInit { // Interface // Arayüz // Bu clas
   // tipi string ya da number olabilir string|number
   // TypeScriptte burada property tanımayabiliyoruz.JS'de constructor içerisinde yapabiliyorduk.
 
-  ngOnInit(): void {}// Component oluşturulduğunda / yerleştirildiğinde çalışır.
+  constructor(private loadingService:LoadingService,private toastrService:ToastrService){}
+  isLoading:boolean = false
+  text!:string
+  // Loading.service'den çekip değerini değiştirmek istiyorum.
+
+
+  ngOnInit(): void {
+    this.subscribeToLoading()
+    this.subscribeToText()
+
+  }// Component oluşturulduğunda / yerleştirildiğinde çalışır.
   // this.title = 5 // 5'e eşitlersek Yukarıda string ya da number olabilceğini söylediğimiz için hata vermeyecektir.
+  subscribeToLoading() {
+    this.loadingService.isLoadingSubject.subscribe((isLoading) =>{
+      console.log(isLoading)
+      this.isLoading = isLoading
+    })
+  }
+  subscribeToText() {
+    this.loadingService.text.subscribe((text)=>{
+      // console.log(text)
+      this.text = text
+    })
+  }
+
 }

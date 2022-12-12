@@ -32,6 +32,9 @@ import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
 import { IfNotDirective } from './directives/if-not.directive';
 import { DateInterceptor } from './interceptors/date.interceptor';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { OverlayLoadingComponent } from './components/overlay-loading/overlay-loading.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 
 @NgModule({
@@ -62,6 +65,7 @@ import { DateInterceptor } from './interceptors/date.interceptor';
     TodoListComponent,
     TodoItemComponent,
     IfNotDirective,
+    OverlayLoadingComponent,
   ], // HTML tarafındaki angular bileşenlerini tanımlar
   imports: [
     BrowserModule,
@@ -70,11 +74,15 @@ import { DateInterceptor } from './interceptors/date.interceptor';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,//required animation module added
-    ToastrModule.forRoot(),// ToastrModule added
+    ToastrModule.forRoot({
+      positionClass:"toast-top-right"
+    }),// ToastrModule added
 
   ], // Angular modülleri import edeceğimiz yer.Angular cli kendisi yapacak.
   providers: [
-    {provide:HTTP_INTERCEPTORS,useClass:DateInterceptor,multi:true}
+    {provide:HTTP_INTERCEPTORS,useClass:DateInterceptor,multi:true},
+    {provide:HTTP_INTERCEPTORS,useClass:LoadingInterceptor,multi:true},
+    {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
   ], // IoC Container'daki Dependency Injection'ları tanımlar
   bootstrap: [AppComponent], // Hangi bileşenin ilk açıldığında çalışacağını belirtir
 })

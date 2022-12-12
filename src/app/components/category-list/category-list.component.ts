@@ -89,7 +89,7 @@ export class CategoryListComponent implements OnInit {
     }); //* Callback
   }
 
-  onSelectedCategory(categoryId: number | null): void {
+  onSelectedCategory(categoryId: number | null): void { // categoryItem'lardan birine tıkladığımda hangisinin tıklandığını göster
     // if (category === null) this.selectedCategoryId = null;
     // else this.selectedCategoryId = category.id;
 
@@ -121,18 +121,19 @@ export class CategoryListComponent implements OnInit {
     if(categoryId !== null) {
       route.push('category', categoryId!.toString());
     }
+
       this.activatedRoute.queryParams.subscribe((queryParams)=> {
       this.router.navigate(route, {queryParams });
         // {queryParams:queryParams} kısayolu {queryParams} key ile parametre aynı ise bu şekilde yazabilirim.
-    })
-
+    }
+    )
       // !! NOT SONU
   }
 
 
   isSelectedCategory(categoryId: number | null): boolean {
     return categoryId === this.selectedCategoryId;
-      // Burda da karşılaştırma yaptırıyorum ve categoryId ile ilgili methoddan dönen değer eşitse return et.
+      // Burda da karşılaştırma yaptırıyorum ve categoryId ile ilgili methoddan dönen değer eşitse return et. Dönen değere [ngClass] ile active class'ı ekliyorum.
 
   }
 }
