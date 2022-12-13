@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { NgModule } from '@angular/core';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
@@ -30,17 +30,19 @@ import { AllFiltersToProductsPipe } from './pipes/all-filters-to-products.pipe';
 import { DiscontinuedPipe } from './pipes/discontinued.pipe';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
-import { IfNotDirective } from './directives/if-not.directive';
+import { IfNotDirective } from './core/directives/if-not.directive';
 import { DateInterceptor } from './interceptors/date.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
-import { OverlayLoadingComponent } from './components/overlay-loading/overlay-loading.component';
+import { OverlayLoadingComponent } from './core/components/overlay-loading/overlay-loading.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
+import { FeaturesModule } from './features/features.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     CategoryListComponent,
     ProductListComponent,
     HomePageComponent,
@@ -64,8 +66,6 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     DiscontinuedPipe,
     TodoListComponent,
     TodoItemComponent,
-    IfNotDirective,
-    OverlayLoadingComponent,
   ], // HTML tarafındaki angular bileşenlerini tanımlar
   imports: [
     BrowserModule,
@@ -74,11 +74,12 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,//required animation module added
-    ToastrModule.forRoot({
+    ToastrModule.forRoot({ // ToastrModule added
       positionClass:"toast-top-right"
-    }),// ToastrModule added
+    }), SharedModule, CoreModule, FeaturesModule,
 
   ], // Angular modülleri import edeceğimiz yer.Angular cli kendisi yapacak.
+  exports:[],
   providers: [
     {provide:HTTP_INTERCEPTORS,useClass:DateInterceptor,multi:true},
     {provide:HTTP_INTERCEPTORS,useClass:LoadingInterceptor,multi:true},

@@ -19,7 +19,7 @@ text:BehaviorSubject<string> = new BehaviorSubject<string>("Text")
   startLoading() {
     // this.isLoading  = true
     this.isLoadingSubject.next(true)
-    this.text.next("Text started")
+    this.text.next("Yükleniyor...")
   }
   stopLoading() {
     // this.isLoading  = false

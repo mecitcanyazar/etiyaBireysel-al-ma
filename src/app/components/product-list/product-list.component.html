@@ -12,6 +12,7 @@
       (change)="onSearchProductNameChange($event)"
       [(ngModel)]="searchProductNameInput"
     />
+    <!-- NgModüle kullanırken app.modüle.ts'de FormsModule'ü import etmem gerekiyor aksi halde hata verecektir. -->
     <!-- [value]="searchProductNameInput" -->
     <!--: $event ilgili event'in özelliklerinin bulunduğu html tarafından geçilen js objesi angular tarafından geçilecektir. -->
   </div>
