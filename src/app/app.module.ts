@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { NgModule } from '@angular/core';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
@@ -30,14 +30,12 @@ import { AllFiltersToProductsPipe } from './pipes/all-filters-to-products.pipe';
 import { DiscontinuedPipe } from './pipes/discontinued.pipe';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
-import { IfNotDirective } from './core/directives/if-not.directive';
 import { DateInterceptor } from './interceptors/date.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
-import { OverlayLoadingComponent } from './core/components/overlay-loading/overlay-loading.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
-import { FeaturesModule } from './features/features.module';
+import { MyCartComponent } from './components/my-cart/my-cart.component';
 
 
 @NgModule({
@@ -49,6 +47,7 @@ import { FeaturesModule } from './features/features.module';
     LoginPageComponent,
     LoadingSpinnerComponent,
     ProductFormComponent,
+    NavbarComponent,
     ProductFormPageComponent,
     DashboardProductsPageComponent,
     DashboardProductListComponent,
@@ -66,6 +65,7 @@ import { FeaturesModule } from './features/features.module';
     DiscontinuedPipe,
     TodoListComponent,
     TodoItemComponent,
+    MyCartComponent,
   ], // HTML tarafındaki angular bileşenlerini tanımlar
   imports: [
     BrowserModule,
@@ -76,7 +76,7 @@ import { FeaturesModule } from './features/features.module';
     BrowserAnimationsModule,//required animation module added
     ToastrModule.forRoot({ // ToastrModule added
       positionClass:"toast-top-right"
-    }), SharedModule, CoreModule, FeaturesModule,
+    }), SharedModule, CoreModule,
 
   ], // Angular modülleri import edeceğimiz yer.Angular cli kendisi yapacak.
   exports:[],

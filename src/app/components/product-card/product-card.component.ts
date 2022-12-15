@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FilterProducts } from 'src/app/models/filterProducts';
 import { Products } from 'src/app/models/products';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-product-card',
@@ -21,11 +22,13 @@ export class ProductCardComponent {
   @Output() showText = new EventEmitter<string> ();
 
 
+
   addToCardClick() {
     // Parent componenti uyar !!
     // Event emitter'ı triggerla
     // emit et
     this.onAddToCardClick.emit(this.product)
+
     // HTML'deki click butonuna tıklandığında seçilen ürünü emit ettiğim fonksiyonun parametresine ekle diyorum.
   }
 

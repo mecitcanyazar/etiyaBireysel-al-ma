@@ -4,10 +4,9 @@ import { ProductsService } from 'src/app/services/products.service';
 import { Products } from 'src/app/models/products';
 import { GetListOptionsType } from 'src/app/models/get-list-options';
 import { Pagination } from 'src/app/models/pagination';
-import { filter, last } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { FilterProducts } from 'src/app/models/filterProducts';
 import { Toast, ToastrService } from 'ngx-toastr';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -30,6 +29,7 @@ export class ProductListComponent implements OnInit {
 
 
   filterCategoryIdForm!:FormGroup
+
 
 
   pagination:Pagination = {
@@ -77,7 +77,8 @@ export class ProductListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
      private router: Router,
      private productService:ProductsService,
-     private toastrService:ToastrService
+     private toastrService:ToastrService,
+     private cartService:CartService
      ) {}
 
 
@@ -101,6 +102,14 @@ export class ProductListComponent implements OnInit {
 
   addToCardClick(product:Products ){
     console.log('ProductListComponentden sepete eklenmesi istenen ürün:',  product)
+
+    this.cartService.add(product).subscribe((response)=>{
+
+      console.log(response)
+
+      this.toastrService.success("Added",product.name  )
+    })
+
   }
 
   getProductsList(options?:GetListOptionsType):void {
@@ -237,7 +246,7 @@ export class ProductListComponent implements OnInit {
   }
 
   showAlert(text:string) {
-    this.toastrService.success(text)
+    this.toastrService.info(text)
   }
 
 }

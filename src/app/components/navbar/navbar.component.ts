@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
   navItems: any[] = [
+
     {
       label: 'Home',
       routerLink: '/',
@@ -17,5 +18,10 @@ export class NavbarComponent {
       routerLink: '/login',
       isRouterActiveExact: false,
     },
+    // {
+    //   label: 'My Cart',
+    //   routerLink: '/carts',
+    //   isRouterActiveExact: false,
+    // },
   ];
 }

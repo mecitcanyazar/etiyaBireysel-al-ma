@@ -23,9 +23,9 @@ text:BehaviorSubject<string> = new BehaviorSubject<string>("Text")
   }
   stopLoading() {
     // this.isLoading  = false
-    setTimeout(() => {
+    // setTimeout(() => {
       this.isLoadingSubject.next(false)
-    }, 3000);
+    // }, 3000);
 
   }
 }

@@ -8,12 +8,14 @@ import { ProductFormPageComponent } from './pages/product-form-page/product-form
 import { DashboardCategoriesPageComponent } from './pages/dashboard-categories-page/dashboard-categories-page.component';
 import { CategoryFormPageComponent } from './pages/category-form-page/category-form-page.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
+import { MyCartComponent } from './components/my-cart/my-cart.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomePageComponent },
   { path: 'category/:categoryId', component: HomePageComponent }, // Route parametrelerimi : ile yazacağım. Değişiklik gösteren yerler  (domain'den sonraki yerler) için  : kullanıyoruz.id numarası gibi.
 
   { path: 'login', component: LoginPageComponent },
+  { path: 'carts', component: MyCartComponent },
   {
     path: 'dashboard', // Grand Parent route
     children: [

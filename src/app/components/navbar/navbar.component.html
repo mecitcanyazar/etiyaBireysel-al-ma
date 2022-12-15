@@ -30,6 +30,7 @@
               {{ navItem.label }}
             </a
           >
+
                 <!-- !!!! NOT !!!! -->
                   <!--Ya da aşağıdakilerdeki gibi de yazabiliriz. Aynısı.
                     routerLink = {{navItem.routerLink=""}}
@@ -43,8 +44,10 @@
                   Active olan class'ı değiştirdiğimde yalnızca ilgili class'a active attribute'u eklensin.
                   Sytax olarak routerLinkActiveOptions {exact:boolean} döndürür.  -->
         </li>
+        <button type="button" class="btn btn-success" [routerLink]="['/carts']">My Cart</button>
       </ul>
       <form class="d-flex" role="search">
+
         <input
           class="form-control me-2"
           type="search"
