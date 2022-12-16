@@ -3,19 +3,36 @@ import { CommonModule } from '@angular/common';
 
 import { SharedRoutingModule } from './shared-routing.module';
 import { AlertComponent } from './components/alert/alert.component';
-import { LoadingInterceptor } from '../interceptors/loading.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { MainLayoutComponent } from './components/main-layout/main-layout.component';
+import { TodoItemComponent } from './components/todo-item/todo-item.component';
+import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { HighlightDirective } from './directives/highlight.directive';
+import { ButtonDirective } from './directives/button.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AlertComponent],
-  imports: [
-    CommonModule,
-    SharedRoutingModule,
+  declarations: [
+    AlertComponent,
+    NavbarComponent,
+    LoginPageComponent,
+    MainLayoutComponent,
+    TodoItemComponent,
+    TodoListComponent,
+    HighlightDirective,
+    ButtonDirective
   ],
-  exports:[AlertComponent],
-  providers:[
-    {provide:HTTP_INTERCEPTORS,useClass:LoadingInterceptor,multi:true},
-  ]
+  imports: [CommonModule, SharedRoutingModule,FormsModule,ReactiveFormsModule],
+  exports: [
+    AlertComponent,
+    NavbarComponent,
+    MainLayoutComponent,
+    TodoItemComponent,
+    TodoListComponent,
+    HighlightDirective,
+    ButtonDirective
+  ],
+  // LoginPageComponent'i kullananan başka bir modül olmadığı için export etmeme gerek kalmadı.
 })
-export class SharedModule { }
+export class SharedModule {}

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { LoadingService } from './services/loading.service';
+import { CartItem } from './features/carts/models/cartItem';
+import { CartService } from './features/carts/services/cart.service';
+import { LoadingService } from './core/services/loading.service';
 
 @Component({
   selector: 'app-root', // HTML tarafındaki etiketi tanımlar
@@ -12,9 +14,10 @@ export class AppComponent implements OnInit { // Interface // Arayüz // Bu clas
   // tipi string ya da number olabilir string|number
   // TypeScriptte burada property tanımayabiliyoruz.JS'de constructor içerisinde yapabiliyorduk.
 
-  constructor(private loadingService:LoadingService,private toastrService:ToastrService){}
+  constructor(private loadingService:LoadingService,private toastrService:ToastrService,private cartService:CartService){}
   isLoading:boolean = false
   text!:string
+  cartItems!:CartItem[]
   // Loading.service'den çekip değerini değiştirmek istiyorum.
 
 
@@ -36,5 +39,7 @@ export class AppComponent implements OnInit { // Interface // Arayüz // Bu clas
       this.text = text
     })
   }
+
+
 
 }

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MyInterceptorInterceptor } from './interceptors/date.interceptor';
+import { MyInterceptorInterceptor } from './core/interceptors/date.interceptor';
 
 describe('MyInterceptorInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
