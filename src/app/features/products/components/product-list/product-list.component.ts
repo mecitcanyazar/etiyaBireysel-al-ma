@@ -104,14 +104,10 @@ export class ProductListComponent implements OnInit {
 
 
   addToCardClick(product:Products ){
-    console.log('ProductListComponentden sepete eklenmesi istenen ürün:',  product)
-
-    this.cartService.add(product).subscribe((response)=>{
-
-      console.log(response)
-
-      this.toastrService.success("Added",product.name  )
-    })
+     // CartItem oluştur..
+    // cartService'den add metodunu çağır..
+    let cartItem: CartItem = { product: product, quantity: 1 };
+    this.cartService.addState(cartItem);
 
   }
 

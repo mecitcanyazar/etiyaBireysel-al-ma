@@ -11,6 +11,8 @@ import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { HighlightDirective } from './directives/highlight.directive';
 import { ButtonDirective } from './directives/button.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { sharedReducers } from './store/shared.reducers';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     HighlightDirective,
     ButtonDirective
   ],
-  imports: [CommonModule, SharedRoutingModule,FormsModule,ReactiveFormsModule],
+  imports: [CommonModule, SharedRoutingModule,FormsModule,ReactiveFormsModule,StoreModule.forRoot(sharedReducers),],
   exports: [
     AlertComponent,
     NavbarComponent,
@@ -31,7 +33,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TodoItemComponent,
     TodoListComponent,
     HighlightDirective,
-    ButtonDirective
+    ButtonDirective,
+
+
   ],
   // LoginPageComponent'i kullananan başka bir modül olmadığı için export etmeme gerek kalmadı.
 })

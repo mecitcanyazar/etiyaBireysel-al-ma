@@ -16,29 +16,30 @@ import { ProductsModule } from './features/products/products.module';
 import { CategoriesModule } from './features/categories/categories.module';
 import { CartsModule } from './features/carts/carts.module';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomePageComponent,
-  ], // HTML tarafındaki angular bileşenlerini tanımlar
+  declarations: [AppComponent, HomePageComponent], // HTML tarafındaki angular bileşenlerini tanımlar
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,//required animation module added
-    ToastrModule.forRoot({ // ToastrModule added
-      positionClass:"toast-top-right"
-    }), SharedModule, CoreModule, ProductsModule, CategoriesModule, CartsModule,
-
+    BrowserAnimationsModule, //required animation module added
+    ToastrModule.forRoot({
+      // ToastrModule added
+      positionClass: 'toast-top-right',
+    }),
+    SharedModule,
+    CoreModule,
+    ProductsModule,
+    CategoriesModule,
+    CartsModule,
   ], // Angular modülleri import edeceğimiz yer.Angular cli kendisi yapacak.
-  exports:[],
+  exports: [],
   providers: [
-    {provide:HTTP_INTERCEPTORS,useClass:DateInterceptor,multi:true},
-    {provide:HTTP_INTERCEPTORS,useClass:LoadingInterceptor,multi:true},
-    {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
+    { provide: HTTP_INTERCEPTORS, useClass: DateInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ], // IoC Container'daki Dependency Injection'ları tanımlar
   bootstrap: [AppComponent], // Hangi bileşenin ilk açıldığında çalışacağını belirtir
 })
